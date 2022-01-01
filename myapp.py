@@ -7,6 +7,7 @@ st.header(f"OpenSea NFT Explorer - {endpoint}")
 
 st.sidebar.subheader("Filters")
 collection = st.sidebar.text_input("Collection")
+token_id = st.sidebar.text_input("Token ID")
 owner = st.sidebar.text_input("Owner")
 
 if endpoint == "Assets":
@@ -15,6 +16,8 @@ if endpoint == "Assets":
     if collection != "":
         params["collection"] = collection
 
+    if token_id != "":
+        params["token_ids"] = [token_id]
     if owner != "":
         params["owner"] = owner
 
@@ -33,6 +36,9 @@ if endpoint == "Assets":
                 st.write(f"Buy Now: {price} {currency_sym}")
 
         st.image(asset["image_url"])
+        
+        if asset["token_id"] == token_id:
+                    st.write(asset)
 
 hide_menu_style = """
         <style>
