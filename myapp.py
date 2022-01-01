@@ -25,20 +25,24 @@ if endpoint == "Assets":
 
     response = r.json()
 
-    for asset in response["assets"]:
-        st.write(f"{asset['name']} (#{asset['token_id']})")
-        if asset["sell_orders"] is not None:
-            sell_order = asset["sell_orders"][0]
-            if sell_order["side"] == 1:
-                currency_sym = sell_order["payment_token_contract"]["symbol"]
-                currency_decimals = sell_order["payment_token_contract"]["decimals"]
-                price = float(sell_order["current_price"]) / math.pow(10, currency_decimals)
-                st.write(f"Buy Now: {price} {currency_sym}")
+    if "assets" not in response:
+        st.write("No assets found")
+    else:
+        for asset in response["assets"]:
+            st.write(f"{asset['name']} (#{asset['token_id']})")
+            if asset["sell_orders"] is not None:
+                sell_order = asset["sell_orders"][0]
+                if sell_order["side"] == 1:
+                    currency_sym = sell_order["payment_token_contract"]["symbol"]
+                    currency_decimals = sell_order["payment_token_contract"]["decimals"]
+                    price = float(sell_order["current_price"]) / math.pow(10, currency_decimals)
+                    st.write(f"Buy Now: {price} {currency_sym}")
 
-        st.image(asset["image_url"])
-        
-        if asset["token_id"] == token_id:
-                    st.write(asset)
+            if asset["image_url"] != "":
+                st.image(asset["image_url"])
+
+            if asset["token_id"] == token_id:
+                        st.write(asset)
 
 hide_menu_style = """
         <style>
